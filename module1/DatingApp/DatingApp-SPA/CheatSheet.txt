@@ -1,0 +1,3 @@
+Install bootstrap & font awesome.
+
+npm install bootstrap font-awesome
