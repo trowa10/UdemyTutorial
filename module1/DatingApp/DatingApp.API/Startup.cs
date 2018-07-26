@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using DatingApp.API.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.API
 {
@@ -37,9 +39,28 @@ namespace DatingApp.API
             .AddDbContext<DataContext>(
                     x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-           
-           //fix to allow origins in the header
+
+            //fix to allow origins in the header
             services.AddCors();
+
+            //registering service using Dependency Injection
+            services.AddScoped<IAuthRepository, AuthRepository>();
+
+            //For JWT authentication scheme for application
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey =
+                                new SymmetricSecurityKey(
+                                    Encoding.ASCII.GetBytes(this.Configuration.GetSection("AppSettings:Token").Value)),
+                            ValidateIssuer = false, //set to false since we are in localhost
+                            ValidateAudience = false //set to false since we are in localhost
+                        };
+                    }
+                    );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +80,8 @@ namespace DatingApp.API
             //fix to allow origins in the header
             app.UseCors(
                 x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            // For Authentication or JWT
+            app.UseAuthentication();
 
             app.UseMvc();
         }
