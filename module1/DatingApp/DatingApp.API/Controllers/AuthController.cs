@@ -28,46 +28,49 @@ namespace DatingApp.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginDTO userLoginDTO)
         {
-            var user = await this._repo.Login(userLoginDTO.Username.ToLower(), userLoginDTO.Password);
-            if (user == null)
-                return Unauthorized();
+                         
+                var user = await this._repo.Login(userLoginDTO.Username.ToLower(), userLoginDTO.Password);
+                if (user == null)
+                    return Unauthorized();
 
-            //JWT - json web token
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Usename)
-            };
+                //JWT - json web token
+                var claims = new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.Usename)
+                };
 
-            //creating security key
-            var key = new SymmetricSecurityKey(Encoding.UTF8
-            .GetBytes(this._config.GetSection("AppSettings:Token").Value));
+                //creating security key
+                var key = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes(this._config.GetSection("AppSettings:Token").Value));
 
-            //Encrypting key to hashing algorithm
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+                //Encrypting key to hashing algorithm
+                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-            //Create Token
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
+                //Create Token
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
 
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = creds
-            };
+                    Subject = new ClaimsIdentity(claims),
+                    Expires = DateTime.Now.AddDays(1),
+                    SigningCredentials = creds
+                };
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return Ok(new { token = tokenHandler.WriteToken(token) });
-
+                return Ok(new { token = tokenHandler.WriteToken(token) });
+           
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserPasswordDTOs UserForRegisterDto)
         {
+          
+            //make sure put [FromBody] before the parameter
+
             //IF we are not using [ApiController] uncomment below code to display error
             //from property validation
-            //make sure put [FromBody] before the parameter
 
             //if(!ModelState.IsValid)
             // return BadRequest(ModelState);
