@@ -37,7 +37,7 @@ namespace DatingApp.API.Controllers
                 var claims = new[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.Usename)
+                    new Claim(ClaimTypes.Name, user.Username)
                 };
 
                 //creating security key
@@ -81,7 +81,7 @@ namespace DatingApp.API.Controllers
                 return BadRequest("Username already exists");
             var userToCreate = new User
             {
-                Usename = UserForRegisterDto.Username
+                Username = UserForRegisterDto.Username
             };
 
             var createdUser = await this._repo.Register(userToCreate, UserForRegisterDto.Password);

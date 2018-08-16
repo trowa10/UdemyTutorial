@@ -20,3 +20,28 @@ npm install bootswatch or npm install bootswatch@4.1.1
 
 create guards using angular cli
 ng g guard auth --spec=false
+
+
+create new ef Migrations if there is added new table/propertly from the Model
+
+dotnet ef migrations add ExtendedUserClass   /*ExtendedUserClass is to define the name of the migrations please check in Migration folder*/
+
+
+modify migration if there is wanted to change
+
+dotnet ef migrations remove  /* remove last migration added from the list if that is the migration you want to change*/
+
+
+How to recover from the migration if you already update it to the database
+select the magration name to revert back
+
+1. dotnet ef database drop
+2. dotnet ef migrations remove 
+3. dotnet ef database update
+
+
+how to seed data to the SQL Lite
+
+1. https://www.json-generator.com/
+
+ 
