@@ -45,3 +45,13 @@ how to seed data to the SQL Lite
 1. https://www.json-generator.com/
 
  
+how to mapping DTO to Model
+
+Use AutoMapper from Nuget Packages
+AutoMapper.Extensions.Microsoft.DependencyInjection 4.0.1
+
+
+
+Ngx Gallery for Angular gallery
+npm install ngx-gallery --save or npm install ngx-gallery@5.3.2 --save
+ 
