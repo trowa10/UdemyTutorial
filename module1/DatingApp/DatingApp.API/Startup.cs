@@ -52,6 +52,9 @@ namespace DatingApp.API
 
             //fix to allow origins in the header
             services.AddCors();
+            
+            //Cloudinary Settings for phot upload
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
 
             //used to automatically map DTO to model, installed using nuget
             services.AddAutoMapper();
