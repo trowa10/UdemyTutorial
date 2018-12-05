@@ -66,3 +66,7 @@ install cloudinary nuget package
 
 CloudinaryDotNet 1.3.1
 
+
+usng ng2 file upload with click and drag
+https://valor-software.com/ng2-file-upload/
+npm install ng2-file-upload --save  or npm install ng2-file-upload@1.3.0 --save
